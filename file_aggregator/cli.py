@@ -1,5 +1,5 @@
 import argparse
-from aggregator import register_target, start_watcher
+from .aggregator import register_target, start_watcher
 
 def main():
     parser = argparse.ArgumentParser(description="Dynamic file file aggregator with session persistence.")

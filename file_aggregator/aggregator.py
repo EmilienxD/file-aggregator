@@ -1,7 +1,7 @@
 import time
 import sys
-from config import load_config, save_config, CONFIG_FILE
-from utils import get_file_states, concatenate_file
+from .config import load_config, save_config, CONFIG_FILE
+from .utils import get_file_states, concatenate_file
 
 def register_target(target, sources, config_path=CONFIG_FILE):
     """Registers a new target and its sources."""
