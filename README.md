@@ -27,13 +27,13 @@ pip install -e .
 ### Register a target file
 
 ```bash
-file-aggregator register target.md source1.md source2.md
+fag register target.md source1.md source2.md
 ```
 
 ### Start the watcher
 
 ```bash
-file-aggregator watch
+fag watch
 ```
 
 ## Running Tests
