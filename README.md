@@ -6,9 +6,10 @@ A CLI-based file aggregator to organize system instructions for code-based AI ag
 
 * **Dynamic Registration:** Register a target file alongside its ordered source files via CLI.
 * **Session Persistence:** Remembers mappings in `aggregator.json`.
-* **Continuous Synchronization:** A watcher process polls source files every 2 seconds, rebuilding targets instantly on modification.
-* **Hot-Reloading:** The watcher picks up new registrations without needing a restart.
-* **file Safety:** Automatically ensures proper spacing between concatenated files.
+* **Management Commands:** Easily enable, disable, or remove aggregators.
+* **Continuous Synchronization:** A watcher process polls source files every 2 seconds (configurable), rebuilding targets instantly on modification.
+* **Hot-Reloading:** The watcher picks up new registrations or configuration changes without needing a restart.
+* **File Safety:** Automatically ensures proper spacing between concatenated files and validates source existence.
 
 ## Installation
 
@@ -16,7 +17,7 @@ A CLI-based file aggregator to organize system instructions for code-based AI ag
 pip install .
 ```
 
-Or for development:
+Or for development (editable mode):
 
 ```bash
 pip install -e .
@@ -30,10 +31,33 @@ pip install -e .
 fag register target.md source1.md source2.md
 ```
 
+### Manage aggregators
+
+```bash
+# List all registered targets
+fag list
+
+# List only enabled targets
+fag list --enabled
+
+# Disable an aggregator
+fag disable target.md
+
+# Enable an aggregator
+fag enable target.md
+
+# Remove an aggregator
+fag remove target.md
+```
+
 ### Start the watcher
 
 ```bash
+# Basic usage
 fag watch
+
+# Custom polling interval (e.g., 5 seconds)
+fag watch --interval 5
 ```
 
 ## Running Tests

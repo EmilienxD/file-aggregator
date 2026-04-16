@@ -18,10 +18,21 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(config, {})
 
     def test_save_and_load_config(self):
-        test_data = {"target.md": ["src1.md", "src2.md"]}
+        test_data = {"target.md": {"sources": ["src1.md", "src2.md"], "enabled": True}}
         save_config(test_data, self.config_path)
         loaded_data = load_config(self.config_path)
         self.assertEqual(test_data, loaded_data)
+
+    def test_config_migration(self):
+        # Save old format
+        old_data = {"target.md": ["src1.md", "src2.md"]}
+        with open(self.config_path, 'w', encoding='utf-8') as f:
+            json.dump(old_data, f)
+        
+        # Load and verify migration
+        loaded_data = load_config(self.config_path)
+        expected_data = {"target.md": {"sources": ["src1.md", "src2.md"], "enabled": True}}
+        self.assertEqual(loaded_data, expected_data)
 
     def test_load_corrupt_config(self):
         with open(self.config_path, 'w') as f:
