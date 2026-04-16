@@ -1,5 +1,6 @@
 import argparse
 from .aggregator import register_target, start_watcher, remove_target, toggle_target, list_targets
+from .config import set_global_config_path
 
 def main():
     parser = argparse.ArgumentParser(description="Dynamic file file aggregator with session persistence.")
@@ -28,6 +29,9 @@ def main():
     # List Command
     parser_list = subparsers.add_parser("list", help="List all registered targets.")
     parser_list.add_argument("--enabled", action="store_true", help="Only list enabled targets.")
+    # Configure Command
+    parser_conf = subparsers.add_parser("configure", help="Set the global configuration path.")
+    parser_conf.add_argument("path", help="The path to the aggregator JSON file.")
 
     args = parser.parse_args()
 
@@ -43,6 +47,9 @@ def main():
         toggle_target(args.target, enabled=False)
     elif args.command == "list":
         list_targets(only_enabled=args.enabled)
+    elif args.command == "configure":
+        actual_path = set_global_config_path(args.path)
+        print(f"Global configuration path set to: {actual_path}")
 
 if __name__ == "__main__":
     main()

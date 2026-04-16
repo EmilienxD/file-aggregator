@@ -5,8 +5,8 @@ A CLI-based file aggregator to organize system instructions for code-based AI ag
 ## Features
 
 * **Dynamic Registration:** Register a target file alongside its ordered source files via CLI.
-* **Session Persistence:** Remembers mappings in `aggregator.json`.
-* **Management Commands:** Easily enable, disable, or remove aggregators.
+* **Session Persistence:** Remembers mappings in `.file-aggregator/aggregator.json` by default.
+* **Management Commands:** Easily enable, disable, remove, or configure the storage path for aggregators.
 * **Continuous Synchronization:** A watcher process polls source files every 2 seconds (configurable), rebuilding targets instantly on modification.
 * **Hot-Reloading:** The watcher picks up new registrations or configuration changes without needing a restart.
 * **File Safety:** Automatically ensures proper spacing between concatenated files and validates source existence.
@@ -48,6 +48,9 @@ fag enable target.md
 
 # Remove an aggregator
 fag remove target.md
+
+# Configure a custom global path for the aggregator JSON
+fag configure path/to/my_config.json
 ```
 
 ### Start the watcher

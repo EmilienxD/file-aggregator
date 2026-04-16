@@ -1,10 +1,10 @@
 import os
 import time
 import sys
-from .config import load_config, save_config, CONFIG_FILE
+from .config import load_config, save_config, get_config_path
 from .utils import get_file_states, concatenate_file
 
-def register_target(target, sources, config_path=CONFIG_FILE):
+def register_target(target, sources, config_path=None):
     """Registers a new target and its sources."""
     # Check if all sources exist
     missing_sources = [src for src in sources if not os.path.exists(src)]
@@ -15,10 +15,10 @@ def register_target(target, sources, config_path=CONFIG_FILE):
 
     config = load_config(config_path)
     config[target] = {"sources": sources, "enabled": True}
-    save_config(config, config_path)
-    print(f"Registered '{target}' with {len(sources)} source(s) in {config_path}.")
+    actual_path = save_config(config, config_path)
+    print(f"Registered '{target}' with {len(sources)} source(s) in {actual_path}.")
 
-def remove_target(target, config_path=CONFIG_FILE):
+def remove_target(target, config_path=None):
     """Removes a registered target."""
     config = load_config(config_path)
     if target in config:
@@ -28,7 +28,7 @@ def remove_target(target, config_path=CONFIG_FILE):
     else:
         print(f"Error: Target '{target}' not found.")
 
-def toggle_target(target, enabled=True, config_path=CONFIG_FILE):
+def toggle_target(target, enabled=True, config_path=None):
     """Enables or disables a registered target."""
     config = load_config(config_path)
     if target in config:
@@ -39,7 +39,7 @@ def toggle_target(target, enabled=True, config_path=CONFIG_FILE):
     else:
         print(f"Error: Target '{target}' not found.")
 
-def list_targets(only_enabled=False, config_path=CONFIG_FILE):
+def list_targets(only_enabled=False, config_path=None):
     """Lists all registered targets."""
     config = load_config(config_path)
     if not config:
@@ -56,9 +56,10 @@ def list_targets(only_enabled=False, config_path=CONFIG_FILE):
         sources = ", ".join(data.get("sources", []))
         print(f"{target:<40} | {status:<10} | {sources}")
 
-def start_watcher(poll_interval=2, config_path=CONFIG_FILE):
+def start_watcher(poll_interval=2, config_path=None):
     """Polls all registered files in the JSON config."""
-    print(f"Starting watcher using {config_path}... (Press Ctrl+C to exit)")
+    actual_path = config_path if config_path else get_config_path()
+    print(f"Starting watcher using {actual_path}... (Press Ctrl+C to exit)")
     
     last_states = {}
 
