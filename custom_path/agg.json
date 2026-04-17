@@ -1,8 +1,0 @@
-{
-  "samples/custom.md": {
-    "sources": [
-      "samples/section1.md"
-    ],
-    "enabled": true
-  }
-}
