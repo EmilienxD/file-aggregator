@@ -1,17 +1,20 @@
-import unittest
+from __future__ import annotations
+
 import os
 import shutil
 import tempfile
+import unittest
+
 from file_aggregator.utils import get_file_states, concatenate_file
 
 class TestUtils(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.test_dir = tempfile.mkdtemp()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         shutil.rmtree(self.test_dir)
 
-    def test_get_file_states(self):
+    def test_get_file_states(self) -> None:
         file1 = os.path.join(self.test_dir, "file1.md")
         with open(file1, 'w') as f:
             f.write("test")
@@ -21,7 +24,7 @@ class TestUtils(unittest.TestCase):
         self.assertIsNotNone(states[file1])
         self.assertIsNone(states["nonexistent.md"])
 
-    def test_concatenate_file(self):
+    def test_concatenate_file(self) -> None:
         src1 = os.path.join(self.test_dir, "src1.md")
         src2 = os.path.join(self.test_dir, "src2.md")
         target = os.path.join(self.test_dir, "target.md")
@@ -37,6 +40,18 @@ class TestUtils(unittest.TestCase):
             content = f.read()
             # Should have injected a newline between src1 and src2
             self.assertEqual(content, "# Section 1\n# Section 2\n")
+
+    def test_concatenate_file_creates_missing_parent_dirs(self) -> None:
+        src = os.path.join(self.test_dir, "src.md")
+        nested_target = os.path.join(self.test_dir, "a", "b", "target.md")
+        with open(src, "w") as f:
+            f.write("ok\n")
+
+        concatenate_file(nested_target, [src])
+
+        self.assertTrue(os.path.isfile(nested_target))
+        with open(nested_target, "r") as f:
+            self.assertEqual(f.read(), "ok\n")
 
 if __name__ == "__main__":
     unittest.main()
